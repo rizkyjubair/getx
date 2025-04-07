@@ -11,12 +11,18 @@ class ProductView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Product List')),
       body: Obx(() {
+        if (productController.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (productController.errorMessage.isNotEmpty) {
+          return Center(child: Text(productController.errorMessage.value));
+        }
         return ListView.builder(
-          itemCount: productController.products.length,
+          itemCount: productController.productList.length,
           itemBuilder: (content, index) {
-            final product = productController.products[index];
+            final product = productController.productList[index];
             return ListTile(
-              title: Text(product.name),
+              title: Text(product.title),
               subtitle: Text('\$${product.price.toString()}'),
               onTap: () {
                 Get.toNamed('/product-details', arguments: product);
